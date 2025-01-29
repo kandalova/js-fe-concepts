@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 3px 5px;
+        }
+    </style>
+</head>
+
+<body something="non-standard">
+<table>
+    <thead>Color table cells</thead>
+    <tr>
+        <td>1:1</td>
+        <td>2:1</td>
+        <td>3:1</td>
+        <td>4:1</td>
+        <td>5:1</td>
+    </tr>
+    <tr>
+        <td>1:2</td>
+        <td>2:2</td>
+        <td>3:2</td>
+        <td>4:2</td>
+        <td>5:2</td>
+    </tr>
+    <tr>
+        <td>1:3</td>
+        <td>2:3</td>
+        <td>3:3</td>
+        <td>4:3</td>
+        <td>5:3</td>
+    </tr>
+    <tr>
+        <td>1:4</td>
+        <td>2:4</td>
+        <td>3:4</td>
+        <td>4:4</td>
+        <td>5:4</td>
+    </tr>
+    <tr>
+        <td>1:5</td>
+        <td>2:5</td>
+        <td>3:5</td>
+        <td>4:5</td>
+        <td>5:5</td>
+    </tr>
+</table>
+<hr/>
+<div id="elem">
+    <span>Find zip in links and log:</span>
+    <a href="http://example.com/file.zip">zip</a>
+    <a href="http://ya.ru">link</a>
+</div>
+<hr/>
+<h1>Usual list</h1>
+<div class="contents">
+    <ul class="book">
+        <li class="chapter">Chapter1</li>
+        <li class="chapter">Chapter2</li>
+    </ul>
+</div>
+<hr/>
+<div data-widget-name="menu">Choose the genre</div>
+<hr/>
+
+<a name="list">Color external links:</a>
+<ul>
+    <li><a href="https://google.com">https://google.com</a></li>
+    <li><a href="/tutorial">/tutorial.html</a></li>
+    <li><a href="local/path">local/path</a></li>
+    <li><a href="ftp://ftp.com/my.zip">ftp://ftp.com/my.zip</a></li>
+    <li><a href="https://nodejs.org">https://nodejs.org</a></li>
+    <li><a href="http://internal.com/test">http://internal.com/test</a></li>
+</ul>
+<hr/>
+<div id="dynamic-list-container">
+    <button onclick="startDynamicList()">Start dynamic list</button>
+    <ul id="dynamic-list">
+
+    </ul>
+</div>
+<hr/>
+<div id="create-tree-container">
+    Create tree from object
+</div>
+<hr/>
+<div id="calendar">
+    Create calendar for giving month
+</div>
+<hr/>
+Create colored watch
+<div id="color-watch">
+    <!-- клик по этой кнопке вызовет clockStart() -->
+    <input type="button" onclick="clockStart()" value="Start">
+    <!-- клик по этой кнопке вызовет clockStop() -->
+    <input type="button" onclick="clockStop()" value="Stop">
+</div>
+<hr/>
+Insert html in the middle
+<ul id="insert-html">
+    <li id="one">1</li>
+    <li id="two">4</li>
+</ul>
+<hr/>
+Sort table by name
+<table id="sort-table">
+    <thead>
+    <tr>
+        <th>Name</th><th>Surname</th><th>Age</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>John</td><td>Smith</td><td>10</td>
+    </tr>
+    <tr>
+        <td>Pete</td><td>Brown</td><td>15</td>
+    </tr>
+    <tr>
+        <td>Ann</td><td>Lee</td><td>5</td>
+    </tr>
+    <tr>
+        <td>...</td><td>...</td><td>...</td>
+    </tr>
+    </tbody>
+</table>
+<script>
+
+  //закрасить диагональ таблицы
+  let table = document.body.firstElementChild;
+
+  for (let i = 0; i < 5; i++) {
+    const tdItem = table.rows[i].cells[i];
+    tdItem.style.backgroundColor = 'red';
+  }
+
+  //закрасить последние элементы каждой строки в таблице
+  let elements = document.querySelectorAll('tr > td:last-child');
+  elements.forEach(element => {
+    element.style.background = 'green';
+  });
+
+  //id лежат в глобальных переменных
+  elem.style.background = 'red';
+
+  //вывести текст ссылок, у которых ссылка - архив
+  const div = document.getElementById('elem');
+  for (const child of div.children) {
+    if (child.matches('a[href$="zip"]')) {
+      console.log(child.innerHTML);
+    }
+  }
+
+  //closest - ближайший родитель по css-селектору
+  const chapter = document.querySelector('.chapter');
+  console.log(chapter);
+  console.log(chapter.closest('.book'))
+  console.log(chapter.closest('.contents'))
+  console.log(chapter.closest('h1'))//null - не родитель
+
+  //узнать тип узла можно через конструктор
+  console.log(document.body.constructor)
+  console.log(document.body.constructor.name)
+
+  console.log(document.body instanceof HTMLBodyElement); // true
+  console.log(document.body instanceof HTMLElement); // true
+  console.log(document.body instanceof Element); // true
+  console.log(document.body instanceof Node); // true
+  console.log(document.body instanceof EventTarget); // true
+  console.log(document.body instanceof Object); // true
+
+  console.log(document.body) //выведет элемент в виде DOM-дерева
+  console.dir(document.body) //выведет элемент в виде DOM-объект
+
+  console.log(document.tagName); // undefined (не элемент) -имя тега только для элементов
+  console.log(document.nodeName) // #document (для любых узлов) - имя тега для любых узлов (имя тега или тип узла)
+
+  //dom елемнты - обычные объекты JS
+  document.body.newProp = 'newProp';
+  console.log(document.body.newProp)
+
+  Element.prototype.newF = function () {
+    console.log(this.nodeName);
+  }
+  document.body.newF();
+
+  //стандартные атрибуты доступны через точку, нестандартные - нет
+  console.log(document.body.something) //undefined
+  console.log(document.body.getAttribute('something')) //non-standard
+  //dataset
+  const lastDiv = document.querySelector('[data-widget-name]');
+  console.log(lastDiv);
+  console.log(lastDiv.getAttribute('data-widget-name')); //value - menu
+  console.log(lastDiv.dataset.widgetName); //value - menu
+
+  //закрасить все external links
+  const links = document.querySelectorAll('a');
+  for (let link of links) {
+    const hashAttr = link.getAttribute('href'); //атрибуты тегов не всегда такие же, как свойства узлов
+
+    if (hashAttr && hashAttr.includes('://') && !hashAttr.startsWith('http://internal.com')) {
+      link.style.color = 'orange';
+    }
+  }
+  //то же самое
+  // найти все ссылки, атрибут href у которых содержит ://
+  // и при этом href не начинается с http://internal.com
+  let selector = 'a[href*="://"]:not([href^="http://internal.com"])';
+  let links2 = document.querySelectorAll(selector);
+  links2.forEach(link => link.style.color = 'orange');
+
+  //создание и вставка элементов из промта
+  function startDynamicList() {
+    const dynamicList = document.querySelector('#dynamic-list');
+    let userInput = undefined;
+    while (userInput !== null) {
+      userInput = window.prompt('Insert new li');
+      if (userInput) {
+        const newLi = document.createElement('li');
+        // newLi.innerHTML = userInput;
+        newLi.textContent = userInput;
+        dynamicList.append(newLi);
+        //or
+        //
+        // dynamicList.insertAdjacentHTML('beforeend', '<li>' + document.createTextNode(userInput) + '</li>') вставит теги юзера - нам такое ненужно
+      }
+    }
+  }
+
+  //создать HTML-дерево из объектов
+
+  // function createTree(container, data) {
+  //   const keys = Object.keys(data);
+  //   if(keys.length){
+  //     const ul = document.createElement('ul');
+  //     keys.forEach(key => {
+  //       const li = document.createElement('li');
+  //       li.textContent = key;
+  //       createTree(li, data[key]);
+  //       // res.insertAdjacentHTML('beforeend', `<li>${key}</li>`)
+  //       ul.append(li);
+  //     })
+  //     container.append(ul)
+  //   }
+  // }
+
+  function createTree(container, data) {
+    const htmlString = generateListHtml(data);
+    container.insertAdjacentHTML('beforeend', htmlString);
+  }
+
+  function generateListHtml(data) {
+    const keys = Object.keys(data);
+    if (keys.length) {
+      let res = '';
+      keys.forEach(key => {
+        res += `<li>${key}${generateListHtml(data[key])}</li>`;
+      })
+      return `<ul>${res}</ul>`
+    }
+    return '';
+  }
+
+  let container = document.getElementById('create-tree-container');
+  let data = {
+    "Fishes": {
+      "trout": {},
+      "salmon": {}
+    },
+
+    "Trees": {
+      "Huge": {
+        "sequoia": {},
+        "oak": {}
+      },
+      "Flowering": {
+        "apple": {},
+        "magnolia": {}
+      }
+    }
+  };
+  createTree(container, data);
+
+  //создать календарь в виде таблицы
+  function createCalendar(elem, year, month) {
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const lastIndex = dayNames.length - 1;
+    Date.prototype.daysInMonth = function () {
+      return 33 - new Date(this.getFullYear(), this.getMonth(), 33).getDate();
+    }
+
+    const table = document.createElement('table');
+    const headRow = table.createTHead().insertRow();
+    for (let i = 0; i < dayNames.length; i++) {
+      const newCell = headRow.insertCell(i);
+      newCell.innerHTML = (i === lastIndex) ? dayNames[0] : dayNames[i + 1];
+    }
+
+    let currentDate = 1;
+    const date = new Date(year, month - 1, currentDate);
+    const daysInMonth = date.daysInMonth();
+    let currentDay = date.getDay() === 0 ? lastIndex : date.getDay() - 1;
+    let currentRow = table.createTBody().insertRow();
+
+    for (let i = 0; i < currentDay; i++) {
+      currentRow.insertCell().innerHTML = '';
+    }
+
+    while (currentDate <= daysInMonth) {
+      let nexCell;
+      if (currentDay === lastIndex) {
+        nexCell = currentRow.insertCell();
+        currentRow = table.insertRow();
+        currentDay = 0;
+      } else {
+        nexCell = currentRow.insertCell();
+        currentDay++;
+      }
+      nexCell.innerHTML = currentDate.toString();
+      currentDate++;
+    }
+    elem.append(table)
+
+  }
+
+  const calendar = document.getElementById('calendar');
+  createCalendar(calendar, 2014, 9);
+
+
+  //Создайте цветные часы
+  const colorWatch = document.getElementById('color-watch');
+  colorWatch.insertAdjacentHTML('afterbegin', `
+<div id="clock">
+<span id="hh" style="color:red">hh</span>:<span id="mm" style="color: blue">mm</span>:<span id="ss" style="color: green">ss</span>
+</div>`);
+
+  let intervalItem;
+  function clockStart(){
+    clearInterval(intervalItem);
+    intervalItem = setInterval(update, 1000);
+    update();
+  }
+
+  function clockStop(){
+    clearInterval(intervalItem);
+    intervalItem = null;
+  }
+
+  function update(){
+    const now = new Date();
+    hh.innerHTML = now.getHours() < 10 ? '0' + now.getHours() : now.getHours();
+    mm.innerHTML = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
+    ss.innerHTML = now.getSeconds() <10 ? '0' + now.getSeconds() : now.getSeconds();
+  }
+
+  //Вставить HTML в список
+  const insertedUl = document.getElementById('insert-html');
+  const li = insertedUl.querySelector('#one');
+  li.insertAdjacentHTML('afterend', `<li>2</li><li>3</li> `);
+
+  //сортировка таблицы
+  const sortTable = document.getElementById('sort-table');
+  sortTableBody = sortTable.querySelector('tbody');
+  const rows = sortTableBody.querySelectorAll('tr');//(table.rows)
+  const rowsArray = Array.from(rows);
+  rowsArray.sort((a, b)=>a.innerHTML.localeCompare(b.innerHTML));
+  sortTableBody.append(...rowsArray)
+  // sortTableBody.innerHTML = rowsArray.map(row => row.outerHTML).join('');
+
+  //
+  // let sortedRows = Array.from(table.rows)
+  //   .slice(1)
+  //   .sort((rowA, rowB) => rowA.cells[0].innerHTML > rowB.cells[0].innerHTML ? 1 : -1);
+  //
+  // table.tBodies[0].append(...sortedRows);
+  // ваш код
+</script>
+</body>
+</html>

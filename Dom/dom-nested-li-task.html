@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+<ul>
+    <li>Animals
+        <ul>
+            <li>Mammals
+                <ul>
+                    <li>Cows</li>
+                    <li>Pigs</li>
+                    <li>Dogs</li>
+                    <li>Tigers</li>
+                </ul>
+            </li>
+            <li>Others
+                <ul>
+                    <li>Snakes</li>
+                    <li>Birds</li>
+                    <li>Lizards</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Fishes
+        <ul>
+            <li>Aquarium
+                <ul>
+                    <li>Guppy</li>
+                    <li>Angelfish</li>
+                </ul>
+            </li>
+            <li>Sea
+                <ul>
+                    <li>Sea trout</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<script>
+  //вывести в консоль для каждого элемента списка <li> его значение и количество его детей (если нет- 0)
+  function logListValueAndChildren(ulElement) {
+    const children = ulElement.children;
+    for (let child of children) {
+      if (child.matches('li')) {
+        const nestedLi = child.querySelectorAll('li').length;
+        console.log(`${child.firstChild.nodeValue.trim()}  ${nestedLi}`);
+        if (nestedLi) {
+          for (let ul of child.querySelectorAll('ul')) {
+            logListValueAndChildren(ul)
+          }
+        }
+      }
+    }
+
+  }
+
+  //another way
+  // for (let li of document.querySelectorAll('li')) {
+  //   let title = li.firstChild.data;  //
+  //   title = title.trim();  //
+  //   // считаем количество потомков
+  //   let count = li.getElementsByTagName('li').length;  //
+  //   alert(title + ': ' + count);
+  // }
+
+  // добавить каждому элементу списка <li> количество вложенных в него элементов. Узлы нижнего уровня, без детей – пропускайте
+  function addChildrenCountToList(ulElement) {
+    const children = ulElement.querySelectorAll('li');
+    if(!children.length) {
+      return
+    }
+
+    for (let li of children) {
+      const nestedLi = li.querySelectorAll('li');
+      if (nestedLi.length) {
+        li.firstChild.data = `${li.firstChild.data} ${nestedLi.length}`;
+      }
+    }
+  }
+
+  const rootList = document.querySelector('ul');
+  logListValueAndChildren(rootList);
+  addChildrenCountToList(rootList);
+
+
+</script>
+
+</body>
+</html>
