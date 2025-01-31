@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Document</title>
+    <style>
+        #move-ball-field {
+            width: 200px;
+            height: 150px;
+            border: 10px solid black;
+            background-color: #00FF00;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #move-ball {
+            position: absolute;
+            transition: all 0.5s ease-in-out;
+            left: 0;
+            top: 0;
+        }
+
+        #title::before {
+            content: '▶ ';
+            font-size: 80%;
+            color: green;
+        }
+
+        #title.open::before {
+            content: '▼ ';
+        }
+
+        .pane {
+            background: #edf5e1;
+            padding: 10px 20px 10px;
+            border-top: solid 2px #c4df9b;
+            position: relative;
+        }
+
+        .remove-button {
+            position: absolute;
+            font-size: 110%;
+            top: 0;
+            color: darkred;
+            right: 10px;
+            display: block;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="height:2000px">
+Hide button after click on it
+<div id="hide-button">
+    <input id="hider" type="button" value="Click to hide me"/>
+</div>
+<hr/>
+Move ball to mouse click
+<div id="move-ball-container">
+    <div id="move-ball-field">
+        <img height="40" id="move-ball" src="https://ru.js.cx/clipart/ball.svg" width="40"> . . . . . . . . . . . . . .
+        . . . . . .
+        . . . . . . . .
+        . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . . . . . . . .
+    </div>
+</div>
+
+<hr/>
+
+<div id="open-list">
+    <div id="title">Сладости (нажми меня)!</div>
+    <ul>
+        <li>Пирожное</li>
+        <li>Пончик</li>
+        <li>Мёд</li>
+    </ul>
+</div>
+
+<hr/>
+Event delegation: hide massages by button click
+<div id="delegation">
+    <div class="pane">
+        <h3>Horse</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores commodi debitis esse fuga hic, iure
+            laboriosam maiores molestias placeat quibusdam repudiandae, temporibus totam, velit veritatis voluptatibus.
+            Illum modi optio repudiandae!</p>
+        <button class="remove-button">[x]</button>
+    </div>
+    <div class="pane">
+        <h3>Dog</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa odit placeat tenetur. A aliquam, atque dicta,
+            eaque eos est fuga hic illum ipsum mollitia, nesciunt nostrum perferendis porro quae vitae.</p>
+        <button class="remove-button">[x]</button>
+    </div>
+    <div class="pane">
+        <h3>Cat</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi aperiam autem cumque earum, hic incidunt
+            ipsa nisi, rem rerum tempora vero vitae voluptatem. Debitis odio sed tempora? Ea, sit!
+        </p>
+        <button class="remove-button">[x]</button>
+    </div>
+</div>
+<script>
+  //Hide button after click on it
+  const hideButton = document.getElementById('hide-button');
+  hideButton.addEventListener('click', function () {
+    this.style.display = 'none';
+  });
+
+  function getCoords(elem) {
+    const box = elem.getBoundingClientRect();
+    return {
+      top: box.top + window.scrollY,
+      right: box.right + window.scrollX,
+      bottom: box.bottom + window.scrollY,
+      left: box.left + window.scrollX
+    }
+  }
+
+  //move ball to mouse click
+  function moveBall() {
+
+    document.getElementById('move-ball-field').addEventListener('click', function (event) {
+      const moveBallField = document.getElementById('move-ball-field');
+      const moveBall = document.getElementById('move-ball');
+
+      // const ballWidth = moveBall.offsetWidth;
+      // const ballHeight = moveBall.offsetHeight;
+      //
+      // const fieldCoords = moveBallField.getBoundingClientRect();
+      //
+      //
+      // if (event.clientX - ballWidth / 2 < fieldCoords.left) {
+      //   moveBall.style.left = 0;
+      // } else if ( event.clientX + ballWidth / 2 > fieldCoords.right) {
+      //   moveBall.style.left = moveBallField.clientWidth - ballWidth + 'px'
+      // } else {
+      //   moveBall.style.left = event.clientX - fieldCoords.left - ballWidth / 2 - moveBallField.clientLeft + 'px';
+      // }
+      //
+      // if ( event.clientY - ballHeight / 2 < fieldCoords.top) {
+      //   moveBall.style.top = 0 + 'px';
+      // } else if (event.clientY + ballHeight / 2 > fieldCoords.bottom) {
+      //   moveBall.style.top = moveBallField.clientHeight - ballHeight + 'px';
+      // } else {
+      //   moveBall.style.top = event.clientY - fieldCoords.top - ballHeight / 2 - moveBallField.clientTop  + 'px';
+      // }
+
+      // координаты поля относительно окна браузера
+      let fieldCoords = this.getBoundingClientRect();
+
+      // мяч имеет абсолютное позиционирование (position:absolute), поле - относительное (position:relative)
+      // таким образом, координаты мяча рассчитываются относительно внутреннего, верхнего левого угла поля
+      let ballCoords = {
+        top: event.clientY - fieldCoords.top - moveBallField.clientTop - moveBall.clientHeight / 2,
+        left: event.clientX - fieldCoords.left - moveBallField.clientLeft - moveBall.clientWidth / 2
+      };
+
+      // запрещаем пересекать верхнюю границу поля
+      if (ballCoords.top < 0) ballCoords.top = 0;
+
+      // запрещаем пересекать левую границу поля
+      if (ballCoords.left < 0) ballCoords.left = 0;
+
+
+      // // запрещаем пересекать правую границу поля
+      if (ballCoords.left + moveBall.clientWidth > moveBallField.clientWidth) {
+        ballCoords.left = moveBallField.clientWidth - moveBall.clientWidth;
+      }
+
+      // запрещаем пересекать нижнюю границу поля
+      if (ballCoords.top + moveBall.clientHeight > moveBallField.clientHeight) {
+        ballCoords.top = moveBallField.clientHeight - moveBall.clientHeight;
+      }
+
+      moveBall.style.left = ballCoords.left + 'px';
+      moveBall.style.top = ballCoords.top + 'px';
+
+    });
+  }
+
+  moveBall();
+
+  //open list
+  function openList() {
+    const list = document.getElementById('open-list').querySelector('ul');
+    const title = document.getElementById('title');
+
+    title.addEventListener('click', function () {
+      list.hidden = !list.hidden;
+      title.classList.toggle('open');
+    })
+  }
+
+  openList();
+
+  //delegation: hide massage
+  function hideMassage() {
+    const delegation = document.getElementById('delegation');
+    delegation.addEventListener('click', function (event) {
+      if (event.target.classList.contains('remove-button')) {
+        event.target.closest('.pane').remove();
+      }
+    })
+  }
+  hideMassage();
+
+</script>
+</body>
+</html>

@@ -1,8 +1,19 @@
 <!DOCTYPE HTML>
 <html>
+<head>
+    <style>
+        .tree span:hover {
+            font-weight: bold;
+        }
+
+        .tree span {
+            cursor: pointer;
+        }
+    </style>
+</head>
 <body>
 
-<ul>
+<ul class="tree">
     <li>Animals
         <ul>
             <li>Mammals
@@ -69,7 +80,7 @@
   // добавить каждому элементу списка <li> количество вложенных в него элементов. Узлы нижнего уровня, без детей – пропускайте
   function addChildrenCountToList(ulElement) {
     const children = ulElement.querySelectorAll('li');
-    if(!children.length) {
+    if (!children.length) {
       return
     }
 
@@ -84,6 +95,30 @@
   const rootList = document.querySelector('ul');
   logListValueAndChildren(rootList);
   addChildrenCountToList(rootList);
+
+  //hide children on click
+  function hideChildren() {
+    // поместить все текстовые узлы в элемент <span>
+    // он занимает только то место, которое необходимо для текста
+    for (let li of rootList.querySelectorAll('li')) {
+      let span = document.createElement('span');
+      li.prepend(span);
+      span.append(span.nextSibling); // поместить текстовый узел внутрь элемента <span>
+    }
+
+    rootList.addEventListener('click', function (event) {
+      if (event.target.tagName !== 'SPAN') {
+        return;
+      }
+      const ul = event.target.parentNode.querySelector('ul');
+      if (ul) {
+        ul.hidden = !ul.hidden;
+      }
+    })
+  }
+
+
+  hideChildren();
 
 
 </script>
