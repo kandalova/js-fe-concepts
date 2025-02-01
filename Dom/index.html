@@ -6,15 +6,24 @@
             border-collapse: collapse;
         }
 
-        td {
+        th, td {
             border: 1px solid black;
             padding: 3px 5px;
         }
+
+        #sort-table th {
+            cursor: pointer;
+        }
+
+        #sort-table th:hover {
+            background: yellow;
+        }
+
     </style>
 </head>
 
 <body something="non-standard">
-<table>
+<table id="color">
     <thead>Color table cells</thead>
     <tr>
         <td>1:1</td>
@@ -98,9 +107,9 @@
 Create colored watch
 <div id="color-watch">
     <!-- клик по этой кнопке вызовет clockStart() -->
-    <input type="button" onclick="clockStart()" value="Start">
+    <input onclick="clockStart()" type="button" value="Start">
     <!-- клик по этой кнопке вызовет clockStop() -->
-    <input type="button" onclick="clockStop()" value="Stop">
+    <input onclick="clockStop()" type="button" value="Stop">
 </div>
 <hr/>
 Insert html in the middle
@@ -109,26 +118,34 @@ Insert html in the middle
     <li id="two">4</li>
 </ul>
 <hr/>
-Sort table by name
+Sort table by name + delegation
 <table id="sort-table">
     <thead>
     <tr>
-        <th>Name</th><th>Surname</th><th>Age</th>
+        <th data-type="string">Name</th>
+        <th data-type="string">Surname</th>
+        <th data-type="number">Age</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>John</td><td>Smith</td><td>10</td>
+        <td>John</td>
+        <td>Smith</td>
+        <td>10</td>
     </tr>
     <tr>
-        <td>Pete</td><td>Brown</td><td>15</td>
+        <td>Pete</td>
+        <td>Brown</td>
+        <td>15</td>
     </tr>
     <tr>
-        <td>Ann</td><td>Lee</td><td>5</td>
+        <td>Ann</td>
+        <td>Lee</td>
+        <td>5</td>
     </tr>
-    <tr>
-        <td>...</td><td>...</td><td>...</td>
-    </tr>
+    <!--    <tr>-->
+    <!--        <td>...</td><td>...</td><td>...</td>-->
+    <!--    </tr>-->
     </tbody>
 </table>
 <script>
@@ -142,7 +159,7 @@ Sort table by name
   }
 
   //закрасить последние элементы каждой строки в таблице
-  let elements = document.querySelectorAll('tr > td:last-child');
+  let elements = document.getElementById('color').querySelectorAll('tr > td:last-child');
   elements.forEach(element => {
     element.style.background = 'green';
   });
@@ -342,22 +359,23 @@ Sort table by name
 </div>`);
 
   let intervalItem;
-  function clockStart(){
+
+  function clockStart() {
     clearInterval(intervalItem);
     intervalItem = setInterval(update, 1000);
     update();
   }
 
-  function clockStop(){
+  function clockStop() {
     clearInterval(intervalItem);
     intervalItem = null;
   }
 
-  function update(){
+  function update() {
     const now = new Date();
     hh.innerHTML = now.getHours() < 10 ? '0' + now.getHours() : now.getHours();
     mm.innerHTML = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
-    ss.innerHTML = now.getSeconds() <10 ? '0' + now.getSeconds() : now.getSeconds();
+    ss.innerHTML = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds();
   }
 
   //Вставить HTML в список
@@ -365,13 +383,13 @@ Sort table by name
   const li = insertedUl.querySelector('#one');
   li.insertAdjacentHTML('afterend', `<li>2</li><li>3</li> `);
 
-  //сортировка таблицы
+  //дефолтная сортировка таблицы
   const sortTable = document.getElementById('sort-table');
-  sortTableBody = sortTable.querySelector('tbody');
-  const rows = sortTableBody.querySelectorAll('tr');//(table.rows)
-  const rowsArray = Array.from(rows);
-  rowsArray.sort((a, b)=>a.innerHTML.localeCompare(b.innerHTML));
-  sortTableBody.append(...rowsArray)
+  // sortTableBody = sortTable.querySelector('tbody');
+  // const rows = sortTableBody.querySelectorAll('tr');//(table.rows)
+  // const rowsArray = Array.from(rows);
+  // rowsArray.sort((a, b) => a.innerHTML.localeCompare(b.innerHTML));
+  // sortTableBody.append(...rowsArray)
   // sortTableBody.innerHTML = rowsArray.map(row => row.outerHTML).join('');
 
   //
@@ -380,6 +398,32 @@ Sort table by name
   //   .sort((rowA, rowB) => rowA.cells[0].innerHTML > rowB.cells[0].innerHTML ? 1 : -1);
   //
   // table.tBodies[0].append(...sortedRows);
+
+  sortTableByCell('sort-table')
+
+  function sortTableByCell(tableId, cellIndex = 0, dataType = "string") {
+    const table = document.getElementById(tableId);
+    let rows = table.querySelectorAll('tr');
+    const rowsArray = Array.from(rows).slice(1);
+    rowsArray.sort((a, b) => {
+      if(dataType==='string') {
+        return a.cells[cellIndex].innerHTML.localeCompare(b.cells[cellIndex].innerHTML);
+      }
+      else{
+        return a.cells[cellIndex].innerHTML - b.cells[cellIndex].innerHTML;
+      }
+    })
+    table.tBodies[0].append(...rowsArray);
+  }
+
+  //динамическая сортировка при клике по заголовку - delegation
+  const sortHead = sortTable.querySelector('thead');
+  sortHead.addEventListener('click', function (event) {
+    const dataType = event.target.dataset['type'];
+    if (!dataType) return;
+    console.log(event.target.cellIndex);
+    sortTableByCell('sort-table', event.target.cellIndex, dataType);
+  })
   // ваш код
 </script>
 </body>
