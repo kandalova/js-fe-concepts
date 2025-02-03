@@ -428,6 +428,51 @@ Make slider - drog and drop
   }
   slide();
 
+  //keyboard events
+  function runOnKeys(func){
+    if(arguments.length < 2) return;
+    const pressed = new Set();
+
+    document.addEventListener('keydown', function(event){
+      pressed.add(event.code);
+    })
+
+    document.addEventListener('keyup', (event) =>{
+      if(pressed.size === arguments.length-1){
+        let res = true;
+        for(let i=1; i < arguments.length-1; i++){
+          if (!pressed.has(arguments[i])){
+            res = false;
+          }
+        }
+        res && func();
+      };
+      pressed.delete(event.code);
+    })
+  }
+
+  runOnKeys(
+    () => alert("Привет!"),
+    "KeyQ",
+    "KeyW"
+  );
+
+  runOnKeys()
+
+  //infiniteScrollPage
+  function infiniteScroll(){
+    window.addEventListener('scroll', function(event) {
+      console.log(event)
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight){
+        document.body.insertAdjacentHTML("beforeend", `<p>Date: ${new Date()}</p>`);
+      }
+
+    });
+
+  }
+
+  infiniteScroll()
+
 </script>
 </body>
 </html>
