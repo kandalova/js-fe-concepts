@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Док</title>
+    <style>
+        .view,
+        .edit {
+            height: 150px;
+            width: 400px;
+            font-family: sans-serif;
+            font-size: 14px;
+            display: block;
+        }
+
+        .view {
+            /* padding + border = 3px */
+            padding: 2px;
+            border: 1px solid black;
+        }
+
+        .edit {
+            /* замена внутреннего отступа рамкой (по-прежнему 3px, и содержимое не смещается) */
+            border: 3px solid blue;
+            padding: 0px;
+        }
+
+        .edit:focus {
+            /* удаление обводки фокуса в Safari */
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<select id="genres">
+    <option value="rock">Рок</option>
+    <option value="blues" selected>Блюз</option>
+</select>
+<hr/>
+<div id="div-textarea">
+    <ul>
+        <li>Кликните на div ниже, чтобы отредактировать текст.</li>
+        <li>Нажатие на Enter или потеря фокуса с ввода сохранят содержимое.</li>
+    </ul>
+
+    HTML-код разрешён.
+
+    <div id="view" class="view">Текст</div>
+</div>
+<script>
+    var genres = document.querySelector('#genres');
+    console.log(genres.value, genres.options[genres.selectedIndex].text);
+    const opt = new Option('Классика', 'classic')
+    // genres.options.add(opt);
+    genres.append(opt);
+    opt.selected = true;
+
+
+//Редактируемый div
+    function addTextArea(innerHTML){
+      let textarea = document.querySelector('textarea');
+      if(!textarea){
+        textarea = document.createElement('textarea');
+        textarea.classList.add('edit');
+        textarea.hidden = true;
+        textarea.addEventListener('blur', function (){
+          console.log('blur');
+          this.style.display='none';
+          updateBlock(textarea.value);
+        })
+        textarea.addEventListener('keydown', function (event){
+          if(event.code === 'Enter'){
+            event.preventDefault();
+            textarea.blur();
+          }
+        })
+        document.body.append(textarea);//view.replaceWith(area);
+      }
+      textarea.value = innerHTML;
+      textarea.style.display='block';
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+
+    function updateBlock(innerHTML){
+      view.innerHTML = innerHTML;
+      view.style.display = 'block';
+    }
+
+    view.setAttribute('tabindex', '0');
+    view.addEventListener('focus', function(event) {
+      console.log('hello');
+      addTextArea(this.innerHTML);
+      this.style.display="none";
+    })
+
+</script>
+</body>
+</html>
+
