@@ -101,6 +101,10 @@
     </style>
 </head>
 <body style="height:2000px">
+<div onchange="console.log('changed')" oninput="console.log('input')" onfocus="console.log('focus')" onblur="console.log('blur')">
+    <input onfocus="console.log('focus1')" onblur="console.log('blur1')">
+</div>
+<hr/>
 Hide button after click on it
 <div id="hide-button">
     <input id="hider" type="button" value="Click to hide me"/>
