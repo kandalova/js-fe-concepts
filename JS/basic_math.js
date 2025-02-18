@@ -87,3 +87,18 @@ console.log('"  -9  " - 5 = ', "  -9  " - 5);
 console.log('null + 1 = ', null + 1);
 console.log('undefined + 1 = ', undefined + 1);
 console.log('" \t \n" - 2 = ', " \t \n" - 2);
+
+//logic operator ??
+let num1 = 10,
+  num2 = 20,
+  result;
+
+if (result === null || result === undefined) {
+  if (num1 !== null && num1 !== undefined) {
+    result = num1;
+  } else {
+    result = num2;
+  }
+}
+//the same
+result ??= (num1 ?? num2)
