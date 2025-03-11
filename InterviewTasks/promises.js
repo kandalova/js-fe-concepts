@@ -25,3 +25,37 @@
   );
 })();
 
+// reject
+// 11
+// 19
+// 24
+// 13
+
+
+(function question6() {
+  const p = Promise.reject();
+
+  p
+    .then(
+      () => console.log('6'),
+    )
+    .catch(
+      () => console.log('9')
+    ).then(
+    () => console.log('11'),
+  );
+
+  p
+    .then(
+      () => console.log('16'),
+    )
+    .catch(
+      () => console.log('19')
+    ).then(
+    () => console.log('21'),
+  );
+})();
+// 9
+// 19
+// 11
+// 21
